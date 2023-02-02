@@ -7,7 +7,7 @@ public sealed class qPlayer : IQPlayer
     FROM public.player";
 
     private const string _selectOne = @"
-    SELECT id, email 
+    SELECT email 
     FROM public.player
     WHERE id=@ID";
 

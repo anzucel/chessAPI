@@ -22,6 +22,12 @@ public sealed class clsPlayerRepository<TI, TC> : clsDataAccess<clsPlayerEntityM
         p.Add("EMAIL", player.email);
         return await add<TI>(p).ConfigureAwait(false);
     }
+    public async Task<TI> updatePlayer(clsNewPlayer player)
+    {
+        var p = new DynamicParameters();
+        p.Add("EMAIL", player.email);
+        return await update<TI>(p).ConfigureAwait(false);
+    }
 
     public async Task<IEnumerable<clsPlayerEntityModel<TI, TC>>> addPlayers(IEnumerable<clsNewPlayer> players)
     {
@@ -39,12 +45,16 @@ public sealed class clsPlayerRepository<TI, TC> : clsDataAccess<clsPlayerEntityM
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<clsPlayerEntityModel<TI, TC>>> getPlayersByGame(TI gameId)
+    public async Task<TI> getPlayers(int player)
     {
-        throw new NotImplementedException();
+        var p = new DynamicParameters();
+        p.Add("ID", player);
+        // p.GetType().GetProperty("black").GetValue(p, null); //get id black and whites
+        // p.Add("EMAIL", player.email);
+        return await get<TI>(p).ConfigureAwait(false);
     }
 
-    public Task updatePlayer(clsPlayer<TI> updatedPlayer)
+    public Task<IEnumerable<clsPlayerEntityModel<TI, TC>>> getPlayersByGame(TI gameId) //buscar por id juego, white y black se busca para buscar por team_id
     {
         throw new NotImplementedException();
     }

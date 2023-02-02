@@ -79,6 +79,32 @@ public abstract class clsDataAccess<TEntity, TKey, TC>
             return data?.FirstOrDefault();
         }
 
+        protected async Task<TResult> get<TResult>(DynamicParameters param)
+        {
+            try
+            {
+                IEnumerable<TResult> result = await rkm.trn.Connection.QueryAsync<TResult>(sql: queries.SQLDataEntity,
+                    param: param,
+                    transaction: rkm.trn).ConfigureAwait(false);
+                return result.FirstOrDefault();
+            }
+            catch (SqlException ex)
+            {
+                logger.LogError("Error al hacer SQL-GET<TResult> {" + queries.SQLDataEntity + "} Error:" + ex.ToString());
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                logger.LogError("Error al hacer SQL-GET<TResult> (TimeOut) {" + queries.SQLDataEntity + "} Error:" + ex.ToString());
+                throw;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError("Error general al hacer SQL-GET<TResult> {" + queries.SQLDataEntity + "} Error:" + ex.ToString());
+                throw;
+            }
+        }   
+
         protected async Task<TResult> add<TResult>(DynamicParameters param)
         {
             try
@@ -286,6 +312,34 @@ public abstract class clsDataAccess<TEntity, TKey, TC>
                 throw;
             }
         }
+
+        protected async Task<TResult> update<TResult>(DynamicParameters param)
+        {
+            try
+            {
+                IEnumerable<TResult> result = await rkm.trn.Connection.QueryAsync<TResult>(sql: queries.UpdateWholeEntity,
+                    param: param,
+                    transaction: rkm.trn,
+                    commandType: CommandType.Text).ConfigureAwait(false);
+                return result.FirstOrDefault();
+            }
+            catch (SqlException ex)
+            {
+                logger.LogError("Error al hacer SQL-ADD<TResult> {" + queries.NewDataEntity + "} Error:" + ex.ToString());
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                logger.LogError("Error al hacer SQL-ADD<TResult> (TimeOut) {" + queries.NewDataEntity + "} Error:" + ex.ToString());
+                throw;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError("Error general al hacer SQL-ADD<TResult> {" + queries.NewDataEntity + "} Error:" + ex.ToString());
+                throw;
+            }
+        }
+
 
         protected async Task set(DynamicParameters param, TC? rowVersion, string query)
         {

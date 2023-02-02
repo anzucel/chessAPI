@@ -3,9 +3,12 @@ using Autofac.Extensions.DependencyInjection;
 using chessAPI;
 using chessAPI.business.interfaces;
 using chessAPI.models.player;
+using chessAPI.models.game;
 using Microsoft.AspNetCore.Authorization;
 using Serilog;
 using Serilog.Events;
+using System.Collections.Generic;
+using System.Web;
 
 //Serilog logger (https://github.com/serilog/serilog-aspnetcore)
 Log.Logger = new LoggerConfiguration()
@@ -45,6 +48,22 @@ try
 
     app.MapPost("player", 
     [AllowAnonymous] async(IPlayerBusiness<int> bs, clsNewPlayer newPlayer) => Results.Ok(await bs.addPlayer(newPlayer)));
+    
+    app.MapPost("game", 
+    [AllowAnonymous] async(IGameBusiness<int> bs, clsNewGame newGame) => Results.Ok(await bs.newGame(newGame)));
+
+    app.MapGet("/players/get/{id:int}", 
+    [AllowAnonymous] async(IPlayerBusiness<int> bs, int id) => Results.Ok(await bs.getPlayer(id)));
+
+    app.MapPut("players/update", 
+    [AllowAnonymous] async(IPlayerBusiness<int> bs, clsNewPlayer dataUpdate) => Results.Ok(await bs.updatePlayer(dataUpdate)));
+
+    app.MapGet("game/get/{id:int}", 
+    [AllowAnonymous] async(IGameBusiness<int> bs, int id) => Results.Ok(await bs.getInfoGame(id)));
+
+    app.MapPut("game/update", 
+    [AllowAnonymous] async(IGameBusiness<int> bs,  clsWinner winner) => Results.Ok(await bs.setWinner(winner)));
+
 
     app.Run();
 }
