@@ -8,4 +8,5 @@ public interface IGameBusiness<TI>
     Task<clsSearchGame<TI>> getInfoGame(int idGame);
     Task<clsInfoGame<TI>> newGame(clsNewGame newGame);
     Task<clsSearchGame<TI>> setWinner(clsWinner winner);
+    Task<clsGame<TI>> startGame(clsGame<TI> gameToUpdate);
 }

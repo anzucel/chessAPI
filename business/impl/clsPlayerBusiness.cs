@@ -21,10 +21,10 @@ public sealed class clsPlayerBusiness<TI, TC> : IPlayerBusiness<TI>
         return new clsPlayer<TI>(x, newPlayer.email);
     }
 
-    public async Task<clsPlayer<TI>> updatePlayer(clsNewPlayer updatePlayer)
+    public async Task<clsPlayer<TI>> updatePlayer(clsPlayer<TI> updatePlayer)
     {
         var x = await playerRepository.updatePlayer(updatePlayer).ConfigureAwait(false);
-        return new clsPlayer<TI>(x, updatePlayer.email);
+        return x == null ? null : new clsPlayer<TI>(x.id, x.email);
     }
 
     public async Task<clsPlayer<TI>> getPlayer(int player)

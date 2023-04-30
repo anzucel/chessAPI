@@ -10,4 +10,5 @@ public interface IGameRepository<TI, TC>
     Task<TI> getInfoGame(int idGame);
     Task<TI> addGame(clsNewGame newGame);
     Task<TI> updateWinner(clsWinner player);
+    Task<clsGameEntityModel<TI, TC>> updateGame(clsGame<TI> gameToUpdate);
 }

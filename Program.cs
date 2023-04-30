@@ -49,14 +49,33 @@ try
     app.MapPost("player", 
     [AllowAnonymous] async(IPlayerBusiness<int> bs, clsNewPlayer newPlayer) => Results.Ok(await bs.addPlayer(newPlayer)));
     
+    //get player by id
+    app.MapGet("player",
+    [AllowAnonymous] async (IPlayerBusiness<int> bs, int id) => Results.Ok(await bs.getPlayer(id)));
+
+
+    app.MapPut("player",
+    [AllowAnonymous] async (IPlayerBusiness<int> bs, clsPlayer<int> playerToUpdate) => {
+        var res = await bs.updatePlayer(playerToUpdate);
+        return res != null ? Results.Ok() : Results.NotFound();
+    }); 
+
+    //new game
     app.MapPost("game", 
     [AllowAnonymous] async(IGameBusiness<int> bs, clsNewGame newGame) => Results.Ok(await bs.newGame(newGame)));
+
+    //start game 
+    app.MapPut("game",
+    [AllowAnonymous] async (IGameBusiness<int> bs, clsGame<int> gameToUpdate) => {
+        var res = await bs.startGame(gameToUpdate);
+        return res != null ? Results.Ok() : Results.NotFound();
+    });
 
     app.MapGet("/players/get/{id:int}", 
     [AllowAnonymous] async(IPlayerBusiness<int> bs, int id) => Results.Ok(await bs.getPlayer(id)));
 
-    app.MapPut("players/update", 
-    [AllowAnonymous] async(IPlayerBusiness<int> bs, clsNewPlayer dataUpdate) => Results.Ok(await bs.updatePlayer(dataUpdate)));
+    // app.MapPut("players/update", 
+    // [AllowAnonymous] async(IPlayerBusiness<int> bs, clsNewPlayer dataUpdate) => Results.Ok(await bs.updatePlayer(dataUpdate)));
 
     app.MapGet("game/get/{id:int}", 
     [AllowAnonymous] async(IGameBusiness<int> bs, int id) => Results.Ok(await bs.getInfoGame(id)));

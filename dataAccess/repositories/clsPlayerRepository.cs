@@ -22,11 +22,12 @@ public sealed class clsPlayerRepository<TI, TC> : clsDataAccess<clsPlayerEntityM
         p.Add("EMAIL", player.email);
         return await add<TI>(p).ConfigureAwait(false);
     }
-    public async Task<TI> updatePlayer(clsNewPlayer player)
+    public async Task<clsPlayerEntityModel<TI, TC>> updatePlayer(clsPlayer<TI> player)
     {
         var p = new DynamicParameters();
         p.Add("EMAIL", player.email);
-        return await update<TI>(p).ConfigureAwait(false);
+        p.Add("ID", player.email);
+        return await set<clsPlayerEntityModel<TI,TC>>(p, null, queries.UpdateWholeEntity, null).ConfigureAwait(false);
     }
 
     public async Task<IEnumerable<clsPlayerEntityModel<TI, TC>>> addPlayers(IEnumerable<clsNewPlayer> players)

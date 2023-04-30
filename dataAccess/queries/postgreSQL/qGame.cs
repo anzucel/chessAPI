@@ -16,6 +16,21 @@ public sealed class qGame : IQGame
 	SET winner=@WINNER
 	WHERE id=@ID";
 
+    private const string _start = @"
+    UPDATE public.game
+	SET blacks=@BLACKS
+    WHERE id=1 AND NOT EXISTS (
+        SELECT a.player_id
+        FROM team_player a
+        WHERE team_id = @WHITES
+        AND EXISTS (
+            SELECT 1
+            FROM team_player b
+            WHERE team_id = @BLACKS AND a.player_id = b.player_id
+        )
+    )
+	RETURNING id";
+
     public string SQLGetAll => _selectAll;
 
     public string SQLDataEntity => _selectOne;
@@ -24,5 +39,6 @@ public sealed class qGame : IQGame
 
     public string DeleteDataEntity => _delete;
 
-    public string UpdateWholeEntity => _update;
+    // public string UpdateWholeEntity => _update;
+    public string UpdateWholeEntity => _start;
 }

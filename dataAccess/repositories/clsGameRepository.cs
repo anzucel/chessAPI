@@ -40,6 +40,16 @@ public sealed class clsGameRepository<TI, TC> : clsDataAccess<clsGameEntityModel
         return await update<TI>(p).ConfigureAwait(false);
     }
 
+    public async Task<clsGameEntityModel<TI, TC>> updateGame(clsGame<TI> game){
+        var p = new DynamicParameters();
+        p.Add("WHITES", game.blacks);
+        p.Add("BLACKS", game.blacks);
+        p.Add("ID", game.id);
+        var res = await set<clsGameEntityModel<TI, TC>>(p, null, queries.UpdateWholeEntity, null)
+        .ConfigureAwait(false);
+        return res;
+    }
+
     protected override DynamicParameters fieldsAsParams(clsGameEntityModel<TI, TC> entity)
     {
         if (entity == null) throw new ArgumentNullException(nameof(entity));
